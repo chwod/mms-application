@@ -1,0 +1,16 @@
+robot.self.name: 小狐狸
+sentence.service.host: http://localhost:5000
+debug: true
+logging:
+  level:
+    root: info
+    com.chwod.robot: debug
+    org.springframework:
+      boot.web.filter.OrderedRequestContextFilter: false
+      jdbc.core.JdbcTemplate: debug
+spring:
+  datasource:
+    url: jdbc:mysql://localhost/robot?useSSL=false
+    username: root
+    password: 34113411
+global.configuration.process.deep: 10
