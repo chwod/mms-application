@@ -17,8 +17,8 @@ public class RobotApplication {
 		SpringApplication.run(RobotApplication.class, args);
 	}
 
-	public FilterRegistrationBean filterProxy() {
-		FilterRegistrationBean registrationBean = new FilterRegistrationBean();
+	public FilterRegistrationBean<DelegatingFilterProxy> filterProxy() {
+		FilterRegistrationBean<DelegatingFilterProxy> registrationBean = new FilterRegistrationBean<>();
 		registrationBean.setFilter(new DelegatingFilterProxy());
 
 		Map<String, String> initParameters = new HashMap<>();
