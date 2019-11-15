@@ -10,11 +10,9 @@ import org.springframework.stereotype.Component;
 
 import com.chwod.robot.action.ActionService;
 import com.chwod.robot.bean.EventContext;
-import com.chwod.robot.bean.Part;
 import com.chwod.robot.bean.Sentence;
 import com.chwod.robot.domain.Knowledge;
 import com.chwod.robot.service.KnowledgeService;
-import com.chwod.robot.utils.Constants;
 import com.chwod.robot.utils.Constants.LEARNING;
 
 /**
