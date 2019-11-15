@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.chwod.robot.action.ActionService;
+import com.chwod.robot.bean.EventContext;
 import com.chwod.robot.bean.Sentence;
 import com.chwod.robot.utils.Constants.LEARNING;
 
@@ -22,10 +23,14 @@ public class XService implements ActionService {
 	private String name;
 
 	@Override
-	public Sentence process(Sentence sentence) {
+	public Sentence process(Sentence sentence, EventContext eventContext) {
 
 		logger.debug("Process class : [{}], sentence : [{}], deep : [{}]", this.getClass().getName(), sentence.getRequestWord(),
 				sentence.getProcessDeep());
+		
+		eventContext.setCentralLanguage(sentence.getPartList().get(3).getWord());
+		
+		eventContext.setType(EventContext.SENTENCE_TYPE_DECLARATIVE);
 		
 		sentence.setResponseWord(this.name);
 		return sentence;

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.chwod.robot.action.ActionService;
+import com.chwod.robot.bean.EventContext;
 import com.chwod.robot.bean.Sentence;
 import com.chwod.robot.component.SelfInfoComponent;
 import com.chwod.robot.utils.Constants.LEARNING;
@@ -29,7 +30,7 @@ public class XService implements ActionService {
 	private SelfInfoComponent selfInfoComponent;
 
 	@Override
-	public Sentence process(Sentence sentence) {
+	public Sentence process(Sentence sentence, EventContext eventContext) {
 
 		logger.debug("Process class : [{}], sentence : [{}], deep : [{}]", this.getClass().getName(), sentence.getRequestWord(),
 				sentence.getProcessDeep());
@@ -55,6 +56,9 @@ public class XService implements ActionService {
 		if (compareTime < DAYTIME) {
 			sentence.setResponseWord("不到一天");
 		}
+		
+		eventContext.setType(EventContext.SENTENCE_TYPE_DECLARATIVE);
+		
 		return sentence;
 	}
 
