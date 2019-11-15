@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.chwod.robot.action.ActionService;
+import com.chwod.robot.bean.EventContext;
 import com.chwod.robot.bean.Part;
 import com.chwod.robot.bean.Sentence;
 import com.chwod.robot.utils.Constants;
@@ -42,7 +43,7 @@ public class TalkService {
 	 * @param sentence
 	 * @return
 	 */
-	public Sentence talk(Sentence sentence) {
+	public Sentence talk(Sentence sentence, EventContext eventContext) {
 		if(sentence == null) {
 			return sentence;
 		}
@@ -50,7 +51,7 @@ public class TalkService {
 			List<Part> partList = this.parse(sentence.getWord());
 			sentence.setPartList(partList);
 		}
-		return this.think(sentence);
+		return this.think(sentence,eventContext);
 	}
 	
 	/**
@@ -58,11 +59,11 @@ public class TalkService {
 	 * @param sentence
 	 * @return
 	 */
-	public Sentence think(Sentence sentence) {
+	public Sentence think(Sentence sentence, EventContext eventContext) {
 		if(!StringUtils.isNotBlank(sentence.getParseWord())) {
 			sentence.setPartList(this.parse(sentence.getRequestWord()));
 		}
-		return this.think(sentence.getParseWord(), sentence);
+		return this.think(sentence.getParseWord(), eventContext, sentence);
 	}
 	
 	/**
@@ -71,9 +72,9 @@ public class TalkService {
 	 * @param sentence
 	 * @return
 	 */
-	public Sentence think(String parseWord, Sentence sentence) {
+	public Sentence think(String parseWord, EventContext eventContext, Sentence sentence) {
 		String serviceName = this.makeServiceName(parseWord);
-		return this.think(sentence, serviceName);
+		return this.think(sentence, eventContext, serviceName);
 	}
 	
 	/**
@@ -82,10 +83,10 @@ public class TalkService {
 	 * @param serviceName
 	 * @return
 	 */
-	private Sentence think(Sentence sentence, String serviceName) {
+	private Sentence think(Sentence sentence, EventContext eventContext, String serviceName) {
 		
 		if(serviceName == null) {
-			return this.think(sentence);
+			return this.think(sentence,eventContext);
 		}
 		
 		sentence.deepPlus();
@@ -101,7 +102,7 @@ public class TalkService {
 		//think process call.
 		if (this.applicationContext.containsBeanDefinition(serviceName)) {
 			ActionService service = (ActionService) this.applicationContext.getBean(serviceName);
-			sentence = service.process(sentence);
+			sentence = service.process(sentence, eventContext);
 			return sentence;
 		}
 		

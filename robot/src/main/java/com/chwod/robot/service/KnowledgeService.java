@@ -13,6 +13,7 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 
+import com.chwod.robot.bean.EventContext;
 import com.chwod.robot.domain.Knowledge;
 import com.chwod.robot.utils.Constants;
 
@@ -59,9 +60,9 @@ public class KnowledgeService {
 
 			@Override
 			public void setValues(PreparedStatement ps) throws SQLException {
-				ps.setString(1, Constants.IS);
+				ps.setString(1, EventContext.SENTECNE_PREDICATE_TYPE_IS);
 				ps.setString(2, content);
-				ps.setString(3, Constants.BELONG);
+				ps.setString(3, EventContext.SENTECNE_PREDICATE_TYPE_BELONG);
 				ps.setString(4, parentContent);
 			}
 		}, new RowMapper<Knowledge>() {
@@ -95,8 +96,8 @@ public class KnowledgeService {
 			
 			@Override
 			public void setValues(PreparedStatement ps) throws SQLException {
-				ps.setString(1, Constants.BELONG);
-				ps.setString(2, Constants.IS);
+				ps.setString(1, EventContext.SENTECNE_PREDICATE_TYPE_BELONG);
+				ps.setString(2, EventContext.SENTECNE_PREDICATE_TYPE_IS);
 				ps.setString(3, name);
 				ps.setString(4, content);
 			}
@@ -116,9 +117,10 @@ public class KnowledgeService {
 	 * get all valid content solutions
 	 * @param name
 	 * @param content
+	 * @param modificationProperty
 	 * @return
 	 */
-	public List<Knowledge> getAllValidContentSolutions(String name, String content, String relationProperty){
+	public List<Knowledge> getAllValidContentSolutions(String name, String content, String modificationProperty){
 		String sql = "select r.content as content, count(r.content) as count from (select distinct k.* from knowledge as k"
 				+ " left join knowledge as n on k.event_id = n.event_id and k.id <> n.id"
 				+ " left join knowledge as c on k.event_id = c.event_id and k.id <> c.id"
@@ -131,11 +133,11 @@ public class KnowledgeService {
 			
 			@Override
 			public void setValues(PreparedStatement ps) throws SQLException {
-				ps.setString(1, Constants.BELONG);
-				ps.setString(2, Constants.IS);
+				ps.setString(1, EventContext.SENTECNE_PREDICATE_TYPE_BELONG);
+				ps.setString(2, EventContext.SENTECNE_PREDICATE_TYPE_IS);
 				ps.setString(3, name);
 				ps.setString(4, content);
-				ps.setString(5, relationProperty);
+				ps.setString(5, modificationProperty);
 			}
 		}, new RowMapper<Knowledge>() {
 

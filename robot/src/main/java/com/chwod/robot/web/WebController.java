@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.chwod.robot.bean.EventContext;
 import com.chwod.robot.bean.Sentence;
 import com.chwod.robot.service.TalkService;
 import com.chwod.robot.utils.Constants;
@@ -57,7 +58,12 @@ public class WebController {
 		Sentence sentence = new Sentence(session);
 		sentence.setRequestWord(q);
 
-		sentence = this.talkService.talk(sentence);
+		EventContext eventContext = session.getAttribute(Constants.EVENT_CONTEXT) == null ? new EventContext() : (EventContext) session.getAttribute(Constants.EVENT_CONTEXT);
+		eventContext.setCurrentEvent(q);
+		
+		sentence = this.talkService.talk(sentence, eventContext);
+		
+		session.setAttribute(Constants.EVENT_CONTEXT, eventContext);
 
 		logger.info("sentence:[{}], parse:[{}], reposne:[{}]", sentence.getWord(), sentence.getParseWord(),
 				sentence.getResponseWord());

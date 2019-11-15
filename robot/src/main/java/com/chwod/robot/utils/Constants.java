@@ -13,15 +13,7 @@ public class Constants {
 	public static final String COUNT = "COUNT";
 	public static final String GLOBAL_CONFIGURATION = "GLOBAL_CONFIGURATION";
 	public static final String PROCESS_DEEP = "PROCESS_DEEP";
-	public static final String CONTEXT_EVENT = "CONTEXT_EVENT";
-	public static final String CURRENT_CONTEXT_EVENTS = "CURRENT_CONTEXT_EVENTS";
-	public static final String CURRENT_CONTEXT_STATUS_MISSING_SUBJECT = "CURRENT_CONTEXT_STATUS_MISSING_SUBJECT";
-	public static final String CURRENT_CONTEXT_STATUS_QUESTION = "CURRENT_CONTEXT_STATUS_QUESTION";
-	public static final String CURRENT_CONTEXT_STATUS_MISSING_RELATIONSHIP_IS = "CURRENT_CONTEXT_STATUS_MISSING_RELATIONSHIP_IS";
-	
-	//experience properties
-	public static final String IS = "is";
-	public static final String BELONG = "belong";
+	public static final String EVENT_CONTEXT = "EVENT_CONTEXT";
 	
 	//robot self
 	public static final String ROBOT_SELF = "ROBOT_SELF";
