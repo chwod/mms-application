@@ -16,8 +16,8 @@ public interface ActionService {
 	
 	/**
 	 * robot learning with learning flag.
-	 * @param sentence
+	 * @param eventContext
 	 * @param flag
 	 */
-	public void learning(Sentence sentence, Constants.LEARNING flag);
+	public void learning(EventContext eventContext, Constants.LEARNING flag);
 }

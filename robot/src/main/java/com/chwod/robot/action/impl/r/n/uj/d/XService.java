@@ -2,6 +2,7 @@ package com.chwod.robot.action.impl.r.n.uj.d;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -14,6 +15,7 @@ import com.chwod.robot.bean.EventContext;
 import com.chwod.robot.bean.Sentence;
 import com.chwod.robot.domain.Knowledge;
 import com.chwod.robot.service.KnowledgeService;
+import com.chwod.robot.utils.Constants;
 import com.chwod.robot.utils.Constants.LEARNING;
 
 /**
@@ -72,10 +74,9 @@ public class XService implements ActionService {
 				// setup context.
 				eventContext.setType(EventContext.SENTENCE_TYPE_QUESTION_YESNO);
 				eventContext.setCurrentEvent(sentence.getRequestWord());
-				List<String> elementList = new ArrayList<>();
-				elementList.add(answer);
-				elementList.add(modificationProperty);
-				eventContext.setElementList(elementList);
+				eventContext.setSubject(answer);
+				eventContext.setPredicate(EventContext.SENTECNE_PREDICATE_TYPE_IS);
+				eventContext.setObject(modificationProperty);
 				
 				sentence.setResponseWord(result.toString());
 				return sentence;
@@ -95,6 +96,7 @@ public class XService implements ActionService {
 			answer.deleteCharAt(answer.length() - 1);
 			answer.replace(answer.lastIndexOf("、"), answer.lastIndexOf("、") + 1, "，或者是");
 			answer.append("，不过我不确定它们是不是").append(modificationProperty).append("，你能告诉我吗？");
+			
 			// setup context.
 			eventContext.setType(EventContext.SENTENCE_TYPE_QUESTION_A_NOT_A);
 			eventContext.setCurrentEvent(sentence.getRequestWord());
@@ -134,6 +136,7 @@ public class XService implements ActionService {
 		answer.append("。");
 		elementList.add(modificationProperty);
 
+		// context setup
 		eventContext.setType(EventContext.SENTENCE_TYPE_DECLARATIVE);
 		eventContext.setCurrentEvent(sentence.getRequestWord());
 		eventContext.setElementList(elementList);
@@ -143,9 +146,24 @@ public class XService implements ActionService {
 	}
 
 	@Override
-	public void learning(Sentence sentence, LEARNING flag) {
-		// TODO Auto-generated method stub
-
+	public void learning(EventContext eventContext, LEARNING flag) {
+		
+		logger.debug("Learning class : [{}], sentence : [{}]", this.getClass().getName(),
+				eventContext.getCurrentEvent());
+		
+		if(Constants.LEARNING.OK == flag) {
+			if(StringUtils.isNotBlank(eventContext.getSubject()) && 
+					StringUtils.isNotBlank(eventContext.getPredicate())
+					&& StringUtils.isNotBlank(eventContext.getObject())) {
+				String uuid = UUID.randomUUID().toString();
+				Knowledge knowledge = new Knowledge();
+				knowledge.setEventId(uuid);
+				knowledge.setName(eventContext.getSubject());
+				knowledge.setProperty(EventContext.SENTECNE_PREDICATE_TYPE_IS);
+				knowledge.setContent(eventContext.getObject());
+				this.knowledgeService.save(knowledge);
+			}
+		}
 	}
 
 }

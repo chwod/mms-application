@@ -29,7 +29,7 @@ public class ULService implements ActionService {
 	}
 
 	@Override
-	public void learning(Sentence sentence, LEARNING flag) {
+	public void learning(EventContext eventContext, LEARNING flag) {
 		// TODO Auto-generated method stub
 
 	}

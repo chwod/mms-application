@@ -44,8 +44,10 @@ public class XService implements ActionService {
 			sentence.setResponseWord("不知道");
 			
 			// context setup
-			eventContext.setType(EventContext.SENTENCE_TYPE_DECLARATIVE);
+			eventContext.setType(EventContext.SENTENCE_TYPE_DECLARATIVE_NEGATIVE);
 			eventContext.setSubject(partList.get(2).getWord());
+			eventContext.setPredicate(partList.get(3).getWord());
+			eventContext.setAttributive(partList.get(0).getWord());
 			
 			return sentence;
 		}
@@ -58,7 +60,11 @@ public class XService implements ActionService {
 			
 			// context setup
 			eventContext.setType(EventContext.SENTENCE_TYPE_DECLARATIVE);
-			eventContext.setSubject(name);
+			eventContext.setSubject(partList.get(2).getWord());
+			eventContext.setPredicate(partList.get(3).getWord());
+			eventContext.setAttributive(partList.get(0).getWord());
+			eventContext.setObject(name);
+			eventContext.setFocus(name);
 			
 			return sentence;
 		}
@@ -93,7 +99,7 @@ public class XService implements ActionService {
 	}
 
 	@Override
-	public void learning(Sentence sentence, LEARNING flag) {
+	public void learning(EventContext eventContext, LEARNING flag) {
 		// TODO Auto-generated method stub
 
 	}

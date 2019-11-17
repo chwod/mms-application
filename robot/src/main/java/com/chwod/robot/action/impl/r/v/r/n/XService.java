@@ -19,7 +19,7 @@ public class XService implements ActionService {
 
 	private static final Logger logger = LoggerFactory.getLogger(ActionService.class);
 
-	@Value("${robot.self.name:程序}")
+	@Value("${com.chwod.robot.name:程序}")
 	private String name;
 
 	@Override
@@ -37,7 +37,7 @@ public class XService implements ActionService {
 	}
 
 	@Override
-	public void learning(Sentence sentence, LEARNING flag) {
+	public void learning(EventContext eventContext, LEARNING flag) {
 		// TODO Auto-generated method stub
 		
 	}
