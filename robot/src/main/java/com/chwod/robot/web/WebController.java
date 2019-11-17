@@ -55,13 +55,13 @@ public class WebController {
 
 		request.setAttribute(Constants.requestWord, q);
 
-		Sentence sentence = new Sentence(session);
+		Sentence sentence = new Sentence();
 		sentence.setRequestWord(q);
 
 		EventContext eventContext = session.getAttribute(Constants.EVENT_CONTEXT) == null ? new EventContext() : (EventContext) session.getAttribute(Constants.EVENT_CONTEXT);
-		eventContext.setCurrentEvent(q);
 		
 		sentence = this.talkService.talk(sentence, eventContext);
+		eventContext.setCurrentEvent(q);
 		
 		session.setAttribute(Constants.EVENT_CONTEXT, eventContext);
 
