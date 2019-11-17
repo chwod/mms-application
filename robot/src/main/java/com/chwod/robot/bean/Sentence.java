@@ -22,20 +22,11 @@ public class Sentence {
 
 	private Integer processDeep = 0;
 
-	private HttpSession session;
-	
-	public Sentence(HttpSession session) {
-		this.session = session;
+	public Sentence() {
 	}
-
-	/**
-	 * get session object of request. use request session to save the current
-	 * context events.
-	 * 
-	 * @return
-	 */
-	public HttpSession getSession() {
-		return session;
+	
+	public Sentence(String requestWord) {
+		this.requestWord = requestWord;
 	}
 
 	/**
