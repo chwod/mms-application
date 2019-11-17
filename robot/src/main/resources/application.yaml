@@ -1,16 +1,33 @@
-robot.self.name: 小狐狸
-sentence.service.host: http://localhost:5000
+# robot configurations
+com.chwod.robot:
+  name: 小狐狸
+  sentence.parseService.host: http://localhost:5000
+  global.configuration.process.deep: 10
+
+
+###################
+#log configurations
 debug: true
 logging:
   level:
     root: info
     com.chwod.robot: debug
+    com.zaxxer.hikari.HikariDataSource: off
     org.springframework:
-      boot.web.filter.OrderedRequestContextFilter: false
+      boot:
+        web.filter.OrderedRequestContextFilter: false
+        autoconfigure.logging.ConditionEvaluationReportLoggingListener: off
       jdbc.core.JdbcTemplate: debug
+      web:
+        HttpLogging:  off
+        client.RestTemplate:  off
+        servlet:
+          mvc.method.annotation.RequestResponseBodyMethodProcessor: off
+          DispatcherServlet:  off
+          
+#spring configurations.
 spring:
   datasource:
     url: jdbc:mysql://localhost/robot?useSSL=false
     username: root
     password: 34113411
-global.configuration.process.deep: 10
