@@ -20,7 +20,7 @@ import com.chwod.robot.utils.Constants;
 @Service
 public class ConfigurationService {
 
-	@Value("${global.configuration.process.deep:10}")
+	@Value("${com.chwod.robot.global.configuration.process.deep:10}")
 	private Integer processDeep;
 	
 	@Autowired
