@@ -25,123 +25,112 @@ public class TalkService {
 
 	@Autowired
 	private ApplicationContext applicationContext;
-	
+
 	@Autowired
 	private RestTemplate restTemplate;
-	
+
 	@Autowired
 	private ConfigurationService configurationService;
-	
-	@Value("${sentence.service.host:http://localhost:5000}")
+
+	@Value("${com.chwod.robot.sentence.parseService.host:http://localhost:5000}")
 	private String parseServiceHost;
-	
+
 	// think process deep
 	private static Integer PROCESSDEEP = null;
-	
+
 	/**
 	 * talk.
+	 * 
 	 * @param sentence
 	 * @return
 	 */
 	public Sentence talk(Sentence sentence, EventContext eventContext) {
-		if(sentence == null) {
+		if (StringUtils.isEmpty(sentence.getRequestWord())) {
 			return sentence;
 		}
-		if(sentence.getPartList() == null) {
-			List<Part> partList = this.parse(sentence.getWord());
-			sentence.setPartList(partList);
-		}
-		return this.think(sentence,eventContext);
-	}
-	
-	/**
-	 * // think process call.
-	 * @param sentence
-	 * @return
-	 */
-	public Sentence think(Sentence sentence, EventContext eventContext) {
-		if(!StringUtils.isNotBlank(sentence.getParseWord())) {
+
+		if (StringUtils.isEmpty(sentence.getParseWord())) {
 			sentence.setPartList(this.parse(sentence.getRequestWord()));
 		}
-		return this.think(sentence.getParseWord(), eventContext, sentence);
+
+		return this.talk(sentence, eventContext,this.makeServiceName(sentence.getParseWord()));
 	}
-	
-	/**
-	 * think process call.
-	 * @param parseWord
-	 * @param sentence
-	 * @return
-	 */
-	public Sentence think(String parseWord, EventContext eventContext, Sentence sentence) {
-		String serviceName = this.makeServiceName(parseWord);
-		return this.think(sentence, eventContext, serviceName);
-	}
-	
+
 	/**
 	 * // think process call.
+	 * 
 	 * @param sentence
+	 * @param eventContext
 	 * @param serviceName
 	 * @return
 	 */
-	private Sentence think(Sentence sentence, EventContext eventContext, String serviceName) {
-		
-		if(serviceName == null) {
-			return this.think(sentence,eventContext);
+	public Sentence talk(Sentence sentence, EventContext eventContext, String serviceName) {
+		if (StringUtils.isEmpty(sentence.getRequestWord())) {
+			return sentence;
 		}
-		
+
+		if (StringUtils.isEmpty(sentence.getParseWord())) {
+			sentence.setPartList(this.parse(sentence.getRequestWord()));
+		}
+
+		if (StringUtils.isEmpty(serviceName)) {
+			serviceName = this.makeServiceName(sentence.getParseWord());
+		}
+
 		sentence.deepPlus();
-		if(PROCESSDEEP == null) {
+		if (PROCESSDEEP == null) {
 			PROCESSDEEP = this.configurationService.getProcessDeep();
 		}
 		// think too much.
-		if(sentence.getProcessDeep() > PROCESSDEEP) {
+		if (sentence.getProcessDeep() > PROCESSDEEP) {
 			sentence.setResponseWord("好复杂，想的我头疼。");
 			return sentence;
 		}
-		
-		//think process call.
+
+		// think process call.
 		if (this.applicationContext.containsBeanDefinition(serviceName)) {
 			ActionService service = (ActionService) this.applicationContext.getBean(serviceName);
 			sentence = service.process(sentence, eventContext);
 			return sentence;
 		}
-		
+
 		// no bean definition, it's unsupported.
 		sentence.setResponseWord("理解不了这句话，你能解释一下吗？");
+
+		// context setup
+		eventContext.setType(EventContext.SENTENCE_TYPE_QUESTION);
+
 		return sentence;
 	}
-	
+
 	/**
 	 * robot learning process call.
+	 * 
 	 * @param sentence
 	 * @param flag
 	 */
-	public void learning(Sentence sentence, Constants.LEARNING flag) {
-		if((sentence != null) && (!StringUtils.isNotBlank(sentence.getRequestWord()))) {
-			List<Part> partList = this.parse(sentence.getRequestWord());
-			sentence.setPartList(partList);
+	public void learning(EventContext eventContext, Constants.LEARNING flag) {
+		if ((eventContext != null) && (StringUtils.isNotBlank(eventContext.getCurrentEvent()))) {
+			Sentence sentence = new Sentence(eventContext.getCurrentEvent());
+			sentence.setPartList(this.parse(sentence.getRequestWord()));
 			String serviceName = this.makeServiceName(sentence.getParseWord());
-			this.learning(sentence, serviceName, flag);
+
+			// think process call.
+			if (this.applicationContext.containsBeanDefinition(serviceName)) {
+				ActionService service = (ActionService) this.applicationContext.getBean(serviceName);
+				service.learning(eventContext, flag);
+			}
 		}
 	}
-	
-	/**
-	 * robot learning process call.
-	 * @param sentence
-	 * @param flag
-	 */
-	private void learning(Sentence sentence, String serviceName, Constants.LEARNING flag) {
-		
-	}
-	
+
 	/**
 	 * make a service name for bean invoking.
+	 * 
 	 * @param parseWord
 	 * @return
 	 */
 	private String makeServiceName(String parseWord) {
-		return new StringBuffer(SERVICE_NAME_PREFIX).append(parseWord).toString()
-				.toUpperCase();
+		return new StringBuffer(SERVICE_NAME_PREFIX).append(parseWord).toString().toUpperCase();
 	}
 
 	/**
@@ -152,8 +141,8 @@ public class TalkService {
 	 */
 	public List<Part> parse(String queryString) {
 		ResponseEntity<List<Part>> response = restTemplate.exchange(
-				new StringBuffer(parseServiceHost).append(queryString).append("/").toString(), HttpMethod.POST,
-				null, new ParameterizedTypeReference<List<Part>>() {
+				new StringBuffer(parseServiceHost).append(queryString).append("/").toString(), HttpMethod.POST, null,
+				new ParameterizedTypeReference<List<Part>>() {
 				});
 		List<Part> partList = response.getBody();
 		return partList;
