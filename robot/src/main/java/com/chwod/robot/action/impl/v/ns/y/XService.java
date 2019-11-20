@@ -2,6 +2,7 @@ package com.chwod.robot.action.impl.v.ns.y;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +14,7 @@ import com.chwod.robot.bean.EventContext;
 import com.chwod.robot.bean.Sentence;
 import com.chwod.robot.domain.Knowledge;
 import com.chwod.robot.service.KnowledgeService;
+import com.chwod.robot.utils.Constants;
 import com.chwod.robot.utils.Constants.LEARNING;
 
 /**
@@ -35,10 +37,11 @@ public class XService implements ActionService {
 				sentence.getRequestWord(), sentence.getProcessDeep());
 
 		String subject = sentence.getPartList().get(1).getWord();
-		eventContext.setSubject(subject);
+		List<String> subjectList = new ArrayList<>();
+		subjectList.add(subject);
+		eventContext.setSubject(subjectList);
 
-		List<Knowledge> knowledgeList = this.knowledgeService.getKnowSolutions(sentence.getPartList().get(1).getWord(),
-				EventContext.SENTECNE_PREDICATE_TYPE_IS);
+		List<Knowledge> knowledgeList = this.knowledgeService.getAllPossibleContentSolutions(subject);
 
 		// unknown
 		if (knowledgeList == null || knowledgeList.size() <= 0) {
@@ -48,48 +51,81 @@ public class XService implements ActionService {
 			return sentence;
 		}
 
-		// one solution
-		if (knowledgeList.size() == 1) {
+		// one solution or one highest possible solution
+		if ((knowledgeList.size() == 1) || (knowledgeList.get(1).getCount() * 2 <= knowledgeList.get(0).getCount())) {
 
 			String object = knowledgeList.get(0).getContent();
 
 			// context setup
 			eventContext.setType(EventContext.SENTENCE_TYPE_DECLARATIVE);
 			eventContext.setPredicate(EventContext.SENTECNE_PREDICATE_TYPE_IS);
-			eventContext.setObject(object);
+			List<String> objectList = new ArrayList<>();
+			objectList.add(object);
+			eventContext.setObject(objectList);
+			eventContext.setFocus(EventContext.SENTENCE_PART_OF_SPEECH_SUBJECT);
 
-			sentence.setResponseWord(new StringBuffer("知道,").append(sentence.getPartList().get(1).getWord()).append("是")
-					.append(object).toString());
+			sentence.setResponseWord(new StringBuffer("知道,").append(subject).append("是").append(object).toString());
 			return sentence;
 		}
 
 		// more than one solution
 		eventContext.setType(EventContext.SENTENCE_TYPE_DECLARATIVE);
 		eventContext.setPredicate(EventContext.SENTECNE_PREDICATE_TYPE_IS);
-		
-		List<String> elementList = new ArrayList<>();
-		elementList.add(subject);
-		StringBuffer responseWords = new StringBuffer("知道,").append(subject)
-				.append("是");
+		eventContext.setFocus(EventContext.SENTENCE_PART_OF_SPEECH_SUBJECT);
+
+		List<String> objectList = new ArrayList<>();
+		objectList.add(subject);
+		StringBuffer responseWords = new StringBuffer("知道,").append(subject).append("是");
 		for (int i = 0; i < knowledgeList.size(); i++) {
-			String content = knowledgeList.get(i).getContent();
-			responseWords.append(content);
-			elementList.add(content);
-			if (i < knowledgeList.size() - 1) {
-				responseWords.append(", 也是");
+			Knowledge knowledge = knowledgeList.get(i);
+			if (knowledge.getCount() * 2 >= knowledgeList.get(0).getCount()) {
+				String content = knowledge.getContent();
+				responseWords.append(content);
+				objectList.add(content);
+				if (i < knowledgeList.size() - 1) {
+					responseWords.append(", 也是");
+				}
 			}
 		}
 		responseWords.append("。");
-		
-		eventContext.setElementList(elementList);
+
+		eventContext.setObject(objectList);
 		sentence.setResponseWord(responseWords.toString());
 		return sentence;
 	}
 
 	@Override
 	public void learning(EventContext eventContext, LEARNING flag) {
-		// TODO Auto-generated method stub
 
+		logger.debug("Learning class : [{}], sentence : [{}]", this.getClass().getName(),
+				eventContext.getCurrentEvent());
+		
+		if(Constants.LEARNING.OK == flag) {
+			if(eventContext.getType() == EventContext.SENTENCE_TYPE_QUESTION_YESNO) {
+				if (eventContext.getSubject() != null && eventContext.getSubject().size() > 0
+						&& eventContext.getObject() != null && eventContext.getObject().size() > 0) {
+					for (String subject : eventContext.getSubject()) {
+						String uuid = UUID.randomUUID().toString();
+						for (String object : eventContext.getObject()) {
+							Knowledge knowledge = new Knowledge(eventContext.getSessionId());
+							knowledge.setEventId(uuid);
+							knowledge.setName(object);
+							knowledge.setProperty(EventContext.SENTECNE_PREDICATE_TYPE_IS);
+							knowledge.setContent(subject);
+							this.knowledgeService.save(knowledge);
+
+							knowledge = new Knowledge(eventContext.getSessionId());
+							knowledge.setEventId(uuid);
+							knowledge.setName(subject);
+							knowledge.setProperty(EventContext.SENTECNE_PREDICATE_TYPE_IS);
+							knowledge.setContent(object);
+							this.knowledgeService.save(knowledge);
+						}
+					}
+					eventContext.setType(null);
+				}
+			}
+		}
 	}
 
 }

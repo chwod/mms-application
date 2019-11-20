@@ -25,13 +25,17 @@ public class LService implements ActionService {
 				sentence.getProcessDeep());
 		
 		sentence.setResponseWord(sentence.getWord());
+		
+		// context setup
+		eventContext.setType(EventContext.SENTENCE_TYPE_DECLARATIVE);
+		
 		return sentence;
 	}
 
 	@Override
 	public void learning(EventContext eventContext, LEARNING flag) {
-		// TODO Auto-generated method stub
-		
+		logger.debug("Learning class : [{}], sentence : [{}]", this.getClass().getName(),
+				eventContext.getCurrentEvent());		
 	}
 
 }

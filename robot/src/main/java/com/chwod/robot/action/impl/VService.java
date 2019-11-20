@@ -30,10 +30,16 @@ public class VService implements ActionService {
 		
 		logger.debug("Process class : [{}], sentence : [{}], deep : [{}]", this.getClass().getName(), sentence.getRequestWord(),
 				sentence.getProcessDeep());
+		Short contextType = eventContext.getType();
+		if(contextType != null && contextType == EventContext.SENTENCE_TYPE_QUESTION_YESNO) {
+			this.talkService.learning(eventContext, Constants.LEARNING.OK);
+			sentence.setResponseWord("好的，我知道了.");
+		}
 		
-		this.talkService.learning(eventContext, Constants.LEARNING.OK);
+		// no context
+		sentence.setResponseWord(new StringBuffer("什么").append(sentence.getRequestWord()).append("啊？").toString());
 		
-		sentence.setResponseWord("好的，我知道了.");
+		// context setup
 		eventContext.setType(EventContext.SENTENCE_TYPE_DECLARATIVE);
 		
 		return sentence;
@@ -41,8 +47,8 @@ public class VService implements ActionService {
 
 	@Override
 	public void learning(EventContext eventContext, LEARNING flag) {
-		// TODO Auto-generated method stub
-
+		logger.debug("Learning class : [{}], sentence : [{}]", this.getClass().getName(),
+				eventContext.getCurrentEvent());
 	}
 
 }

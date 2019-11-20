@@ -29,15 +29,16 @@ public class KnowledgeService {
 	 * @param knowledge
 	 */
 	public void save(Knowledge knowledge) {
-		this.jdbcTemplate.update("insert into knowledge(event_id, name, property, content) values (?, ?, ?, ?)",
+		this.jdbcTemplate.update("insert into knowledge(session_id, event_id, name, property, content) values (?,?, ?, ?, ?)",
 				new PreparedStatementSetter() {
 
 					@Override
 					public void setValues(PreparedStatement ps) throws SQLException {
-						ps.setString(1, knowledge.getEventId());
-						ps.setString(2, knowledge.getName());
-						ps.setString(3, knowledge.getProperty());
-						ps.setString(4, knowledge.getContent());
+						ps.setString(1, knowledge.getSessionId());
+						ps.setString(2, knowledge.getEventId());
+						ps.setString(3, knowledge.getName());
+						ps.setString(4, knowledge.getProperty());
+						ps.setString(5, knowledge.getContent());
 					}
 				});
 	}
@@ -79,12 +80,12 @@ public class KnowledgeService {
 	}
 	
 	/**
-	 * get all possible content solutions
+	 * get all possible modification content solutions
 	 * @param name
 	 * @param content
 	 * @return
 	 */
-	public List<Knowledge> getAllPossibleContentSolutions(String name, String content){
+	public List<Knowledge> getAllPossibleModificationContentSolutions(String name, String content){
 		String sql = "select r.content as content, count(r.content) as count from (select distinct k.* from knowledge as k"
 				+ " left join knowledge as n on k.event_id = n.event_id and k.id <> n.id"
 				+ " left join knowledge as c on k.event_id = c.event_id and k.id <> c.id"
@@ -114,13 +115,13 @@ public class KnowledgeService {
 	}
 	
 	/**
-	 * get all valid content solutions
+	 * get all valid modification content solutions
 	 * @param name
 	 * @param content
-	 * @param modificationProperty
+	 * @param modificationName
 	 * @return
 	 */
-	public List<Knowledge> getAllValidContentSolutions(String name, String content, String modificationProperty){
+	public List<Knowledge> getAllValidModificationContentSolutions(String name, String content, String modificationName){
 		String sql = "select r.content as content, count(r.content) as count from (select distinct k.* from knowledge as k"
 				+ " left join knowledge as n on k.event_id = n.event_id and k.id <> n.id"
 				+ " left join knowledge as c on k.event_id = c.event_id and k.id <> c.id"
@@ -137,7 +138,7 @@ public class KnowledgeService {
 				ps.setString(2, EventContext.SENTECNE_PREDICATE_TYPE_IS);
 				ps.setString(3, name);
 				ps.setString(4, content);
-				ps.setString(5, modificationProperty);
+				ps.setString(5, modificationName);
 			}
 		}, new RowMapper<Knowledge>() {
 
@@ -152,21 +153,48 @@ public class KnowledgeService {
 	}
 	
 	/**
-	 * get know solutions.
+	 * get all possible content solutions.
 	 * @param name
-	 * @param property
 	 * @return
 	 */
-	public List<Knowledge> getKnowSolutions(String name, String property) {
+	public List<Knowledge> getAllPossibleContentSolutions(String name) {
 		String sql = "select k.content as content, count(k.content) as count from knowledge as k where k.name = ? and k.property = ? group by k.content order by 2 desc";
 		return this.jdbcTemplate.query(sql, new PreparedStatementSetter() {
 
 			@Override
 			public void setValues(PreparedStatement ps) throws SQLException {
 				ps.setString(1, name);
-				ps.setString(2, property);
+				ps.setString(2, EventContext.SENTECNE_PREDICATE_TYPE_IS);
 			}
 
+		}, new RowMapper<Knowledge>() {
+
+			@Override
+			public Knowledge mapRow(ResultSet rs, int rowNum) throws SQLException {
+				Knowledge knowledge = new Knowledge();
+				knowledge.setContent(rs.getString(Constants.CONTENT));
+				knowledge.setCount(rs.getLong(Constants.COUNT));
+				return knowledge;
+			}
+		});
+	}
+	
+	/**
+	 * get all valid content solutions
+	 * @return
+	 */
+	public List<Knowledge> getAllValidContentSolutions(String name, String modificationContent){
+		String sql = " select r.content as content, count(r.content) as count from (select distinct k.* from knowledge as k"
+				+ " left join knowledge as c on k.content = c.name and k.property = c.property"
+				+ " where k.name = ? and k.property = ? and c.content = ?) as r group by r.content order by 2 desc";
+		return this.jdbcTemplate.query(sql, new PreparedStatementSetter() {
+			
+			@Override
+			public void setValues(PreparedStatement ps) throws SQLException {
+				ps.setString(1, name);
+				ps.setString(2, EventContext.SENTECNE_PREDICATE_TYPE_IS);
+				ps.setString(3, modificationContent);
+			}
 		}, new RowMapper<Knowledge>() {
 
 			@Override

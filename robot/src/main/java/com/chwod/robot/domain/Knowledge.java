@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 public class Knowledge {
 
 	private Long id;
+	private String sessionId;
 	private String eventId;
 	private String name;
 	private String property;
@@ -12,6 +13,13 @@ public class Knowledge {
 	private Timestamp createTime;
 	
 	private Long count;
+	
+	public Knowledge() {
+	}
+	
+	public Knowledge(String sessionId) {
+		this.sessionId = sessionId;
+	}
 
 	public Long getId() {
 		return id;
@@ -67,5 +75,13 @@ public class Knowledge {
 
 	public void setCount(Long count) {
 		this.count = count;
+	}
+
+	public String getSessionId() {
+		return sessionId;
+	}
+
+	public void setSessionId(String sessionId) {
+		this.sessionId = sessionId;
 	}
 }

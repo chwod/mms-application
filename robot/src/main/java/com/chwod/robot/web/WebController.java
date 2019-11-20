@@ -58,9 +58,11 @@ public class WebController {
 		Sentence sentence = new Sentence();
 		sentence.setRequestWord(q);
 
-		EventContext eventContext = session.getAttribute(Constants.EVENT_CONTEXT) == null ? new EventContext() : (EventContext) session.getAttribute(Constants.EVENT_CONTEXT);
-		
+		EventContext eventContext = session.getAttribute(Constants.EVENT_CONTEXT) == null ? new EventContext(session.getId()) : (EventContext) session.getAttribute(Constants.EVENT_CONTEXT);
 		sentence = this.talkService.talk(sentence, eventContext);
+		eventContext.setTargetResponse(eventContext.getCurrentResponse());
+		eventContext.setCurrentResponse(sentence.getResponseWord());
+		eventContext.setTargetEvent(eventContext.getCurrentEvent());
 		eventContext.setCurrentEvent(q);
 		
 		session.setAttribute(Constants.EVENT_CONTEXT, eventContext);

@@ -29,7 +29,6 @@ public class XService implements ActionService {
 				sentence.getProcessDeep());
 		
 		eventContext.setCentralLanguage(sentence.getPartList().get(3).getWord());
-		
 		eventContext.setType(EventContext.SENTENCE_TYPE_DECLARATIVE);
 		
 		sentence.setResponseWord(this.name);
@@ -38,8 +37,8 @@ public class XService implements ActionService {
 
 	@Override
 	public void learning(EventContext eventContext, LEARNING flag) {
-		// TODO Auto-generated method stub
-		
+		logger.debug("Learning class : [{}], sentence : [{}]", this.getClass().getName(),
+				eventContext.getCurrentEvent());		
 	}
 
 }

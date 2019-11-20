@@ -23,19 +23,19 @@ public class XService implements ActionService {
 
 		logger.debug("Process class : [{}], sentence : [{}], deep : [{}]", this.getClass().getName(),
 				sentence.getRequestWord(), sentence.getProcessDeep());
-		String currentEvent = eventContext.getCurrentEvent();
+		String currentResponse = eventContext.getCurrentResponse();
 
-		eventContext.setType(currentEvent == null ? EventContext.SENTENCE_TYPE_DECLARATIVE_NEGATIVE
+		eventContext.setType(currentResponse == null ? EventContext.SENTENCE_TYPE_DECLARATIVE_NEGATIVE
 				: EventContext.SENTENCE_TYPE_DECLARATIVE);
 
-		sentence.setResponseWord(currentEvent == null ? "我刚才什么也没有说啊！" : currentEvent);
+		sentence.setResponseWord(currentResponse == null ? "我刚才什么也没有说啊！" : currentResponse);
 		return sentence;
 	}
 
 	@Override
 	public void learning(EventContext eventContext, LEARNING flag) {
-		// TODO Auto-generated method stub
-
+		logger.debug("Learning class : [{}], sentence : [{}]", this.getClass().getName(),
+				eventContext.getCurrentEvent());
 	}
 
 }

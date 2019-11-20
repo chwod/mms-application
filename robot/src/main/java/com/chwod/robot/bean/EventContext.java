@@ -66,6 +66,56 @@ public class EventContext {
 	 */
 	public static final short SENTENCE_TYPE_EXCLAMATORY = 4;
 	
+	//part of speech
+	/**
+	 * 主语
+	 */
+	public static final short SENTENCE_PART_OF_SPEECH_SUBJECT = 101;
+	/**
+	 * 句子类型
+	 */
+	public static final short SENTENCE_PART_OF_SPEECH_TYPE = 102;
+	/**
+	 * 句子子类型
+	 */
+	public static final short SENTENCE_PART_OF_SPEECH_SUBTYPE = 103;
+	/**
+	 * 谓语
+	 */
+	public static final short SENTENCE_PART_OF_SPEECH_PREDICATE = 104;
+	/**
+	 * 宾语
+	 */
+	public static final short SENTENCE_PART_OF_SPEECH_OBJECT = 105;
+	/**
+	 * 动语
+	 */
+	public static final short SENTENCE_PART_OF_SPEECH_VERB = 106;
+	/**
+	 * 主语定语
+	 */
+	public static final short SENTENCE_PART_OF_SPEECH_ATTRIBUTIVE_BEFORE_SUBJECT = 107;
+	/**
+	 * 宾语定语
+	 */
+	public static final short SENTENCE_PART_OF_SPEECH_ATTRIBUTIVE_BEFORE_OBJECT = 108;
+	/**
+	 * 状语
+	 */
+	public static final short SENTENCE_PART_OF_SPEECH_ADVERBIAL = 109;
+	/**
+	 * 补语
+	 */
+	public static final short SENTENCE_PART_OF_SPEECH_COMPLEMENT = 110;
+	/**
+	 * 中心语
+	 */
+	public static final short SENTENCE_PART_OF_SPEECH_CENTRALLANGUAGE = 111;
+	/**
+	 * 介词
+	 */
+	public static final short SENTENCE_PART_OF_SPEECH_PREPOSITION = 112;
+	
 	//sentence predicate type
 	/**
 	 * 是
@@ -75,32 +125,34 @@ public class EventContext {
 	 * 属于
 	 */
 	public static final String SENTECNE_PREDICATE_TYPE_BELONG = "BELONG";
+	
+	private String sessionId;
 
 	private Short type;
 	private Short subType;
 
-	private String subject; 			// 主语
-	private String predicate; 			// 谓语
-	private String object; 				// 宾语
-	private String verb; 				// 动语
-	private String attributive; 		// 定语
-	private String adverbial; 			// 状语
-	private String complement; 			// 补语
-	private String centralLanguage; 	// 中心语
-	private String preposition;			// 介词
+	private List<String> subject; 									// 主语
+	private String predicate; 									// 谓语
+	private List<String> object; 										// 宾语
+	private String verb; 										// 动语
+	private List<String> attributiveBeforeSubject; 					// 主语定语
+	private List<String> attributiveBeforeObject;					// 宾语定语
+	private String adverbial; 									// 状语
+	private String complement; 									// 补语
+	private String centralLanguage; 							// 中心语
+	private String preposition;									// 介词
 	
-	private String focus;				// 焦点
+	private short focus;		// 焦点
 
-	private String time; 				// 时间
-	private String address;				// 地点
-	private String people; 				// 人物
-	private String event; 				// 事件
-
-	private String currentEvent; 		// 当前事件
-	private String targetEvent; 		// 目标事件
+	private String currentEvent; 								// 当前事件
+	private String currentResponse;								// 当前事件的回应
+	private String targetEvent; 								// 目标事件
+	private String targetResponse;								// 目标事件的回应
 	
-	private List<String> elementList;	// 需要处理的元素列表，有前后顺序
-
+	public EventContext(String sessionId) {
+		this.sessionId = sessionId;
+	}
+	
 	/**
 	 * 句型
 	 * @return
@@ -131,13 +183,13 @@ public class EventContext {
 	 * 主语
 	 * @return
 	 */
-	public String getSubject() {
+	public List<String> getSubject() {
 		return subject;
 	}
 	/**
 	 * 主语
 	 */
-	public void setSubject(String subject) {
+	public void setSubject(List<String> subject) {
 		this.subject = subject;
 	}
 	/**
@@ -157,13 +209,13 @@ public class EventContext {
 	 * 宾语
 	 * @return
 	 */
-	public String getObject() {
+	public List<String> getObject() {
 		return object;
 	}
 	/**
 	 * 宾语
 	 */
-	public void setObject(String object) {
+	public void setObject(List<String> object) {
 		this.object = object;
 	}
 	/**
@@ -179,19 +231,7 @@ public class EventContext {
 	public void setVerb(String verb) {
 		this.verb = verb;
 	}
-	/**
-	 * 定语
-	 * @return
-	 */
-	public String getAttributive() {
-		return attributive;
-	}
-	/**
-	 * 定语
-	 */
-	public void setAttributive(String attributive) {
-		this.attributive = attributive;
-	}
+
 	/**
 	 * 状语
 	 * @return
@@ -232,58 +272,6 @@ public class EventContext {
 		this.centralLanguage = centralLanguage;
 	}
 	/**
-	 * 时间
-	 * @return
-	 */
-	public String getTime() {
-		return time;
-	}
-	/**
-	 * 时间
-	 */
-	public void setTime(String time) {
-		this.time = time;
-	}
-	/**
-	 * 地点
-	 * @return
-	 */
-	public String getAddress() {
-		return address;
-	}
-	/**
-	 * 地点
-	 */
-	public void setAddress(String address) {
-		this.address = address;
-	}
-	/**
-	 * 人物
-	 * @return
-	 */
-	public String getPeople() {
-		return people;
-	}
-	/**
-	 * 人物
-	 */
-	public void setPeople(String people) {
-		this.people = people;
-	}
-	/**
-	 * 事件
-	 * @return
-	 */
-	public String getEvent() {
-		return event;
-	}
-	/**
-	 * 事件
-	 */
-	public void setEvent(String event) {
-		this.event = event;
-	}
-	/**
 	 * 当前事件
 	 * @return
 	 */
@@ -310,19 +298,6 @@ public class EventContext {
 		this.targetEvent = targetEvent;
 	}
 	/**
-	 * 元素列表
-	 * @return
-	 */
-	public List<String> getElementList() {
-		return elementList;
-	}
-	/**
-	 * 元素列表
-	 */
-	public void setElementList(List<String> elementList) {
-		this.elementList = elementList;
-	}
-	/**
 	 * 介词
 	 * @return
 	 */
@@ -339,14 +314,79 @@ public class EventContext {
 	 * 关注点
 	 * @return
 	 */
-	public String getFocus() {
+	public short getFocus() {
 		return focus;
 	}
 	/**
 	 * 关注点
 	 */
-	public void setFocus(String focus) {
+	public void setFocus(short focus) {
 		this.focus = focus;
 	}
+	/**
+	 * 主语定语
+	 * @return
+	 */
+	public List<String> getAttributiveBeforeSubject() {
+		return attributiveBeforeSubject;
+	}
+	/**
+	 * 主语定语
+	 * @param attributiveBeforeSubject
+	 */
+	public void setAttributiveBeforeSubject(List<String> attributiveBeforeSubject) {
+		this.attributiveBeforeSubject = attributiveBeforeSubject;
+	}
+	/**
+	 * 宾语定语
+	 * @return
+	 */
+	public List<String> getAttributiveBeforeObject() {
+		return attributiveBeforeObject;
+	}
+	/**
+	 *  宾语定语
+	 * @param attributiveBeforeObject
+	 */
+	public void setAttributiveBeforeObject(List<String> attributiveBeforeObject) {
+		this.attributiveBeforeObject = attributiveBeforeObject;
+	}
+	public String getSessionId() {
+		return sessionId;
+	}
+	public void setSessionId(String sessionId) {
+		this.sessionId = sessionId;
+	}
 
+	/**
+	 * 当前语境中的回应
+	 * @return
+	 */
+	public String getCurrentResponse() {
+		return currentResponse;
+	}
+
+	/**
+	 * 当前语境中的回应
+	 * @param currentResponse
+	 */
+	public void setCurrentResponse(String currentResponse) {
+		this.currentResponse = currentResponse;
+	}
+
+	/**
+	 * 上一语境中的回应
+	 * @return
+	 */
+	public String getTargetResponse() {
+		return targetResponse;
+	}
+
+	/**
+	 * 上一语境中的回应
+	 * @param targetResponse
+	 */
+	public void setTargetResponse(String targetResponse) {
+		this.targetResponse = targetResponse;
+	}
 }

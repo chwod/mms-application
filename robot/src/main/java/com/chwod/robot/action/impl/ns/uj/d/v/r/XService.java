@@ -45,34 +45,45 @@ public class XService implements ActionService {
 			
 			// context setup
 			eventContext.setType(EventContext.SENTENCE_TYPE_DECLARATIVE_NEGATIVE);
-			eventContext.setSubject(partList.get(2).getWord());
+			List<String> subjectList = new ArrayList<>();
+			subjectList.add(partList.get(2).getWord());
+			eventContext.setSubject(subjectList);
 			eventContext.setPredicate(partList.get(3).getWord());
-			eventContext.setAttributive(partList.get(0).getWord());
+			List<String> attributiveList = new ArrayList<>();
+			attributiveList.add(partList.get(0).getWord());
+			eventContext.setAttributiveBeforeSubject(attributiveList);
+			eventContext.setFocus(EventContext.SENTENCE_PART_OF_SPEECH_SUBJECT);
 			
 			return sentence;
 		}
 
 		// only one solution or one highest possible solution
 		Knowledge maxPossibleSolution = solutions.get(0);
-		if ((solutions.size() == 1) || (solutions.get(1).getCount() * 2 < maxPossibleSolution.getCount())) {
-			String name = solutions.get(0).getName();
-			sentence.setResponseWord(name);
+		if ((solutions.size() == 1) || (solutions.get(1).getCount() * 2 <= maxPossibleSolution.getCount())) {
+			String result = solutions.get(0).getName();
+			sentence.setResponseWord(result);
 			
 			// context setup
 			eventContext.setType(EventContext.SENTENCE_TYPE_DECLARATIVE);
-			eventContext.setSubject(partList.get(2).getWord());
+			List<String> subjectList = new ArrayList<>();
+			subjectList.add(partList.get(2).getWord());
+			eventContext.setSubject(subjectList);
 			eventContext.setPredicate(partList.get(3).getWord());
-			eventContext.setAttributive(partList.get(0).getWord());
-			eventContext.setObject(name);
-			eventContext.setFocus(name);
+			List<String> attributiveList = new ArrayList<>();
+			attributiveList.add(partList.get(0).getWord());
+			eventContext.setAttributiveBeforeSubject(attributiveList);
+			List<String> objectList = new ArrayList<>();
+			objectList.add(result);
+			eventContext.setObject(objectList);
+			eventContext.setFocus(EventContext.SENTENCE_PART_OF_SPEECH_OBJECT);
 			
 			return sentence;
 		}
 
 		// more than one highest possible solutions.
 		StringBuffer responseWord = new StringBuffer("可能是");
-		List<String> elementList = new ArrayList<>();
-		elementList.add(maxPossibleSolution.getName());
+		List<String> subjectList = new ArrayList<>();
+		subjectList.add(maxPossibleSolution.getName());
 		responseWord.append(maxPossibleSolution.getName()).append(",也可能是");
 
 		for (int i = 1; i < solutions.size(); i++) {
@@ -80,7 +91,7 @@ public class XService implements ActionService {
 			if (knowledge.getCount() * 2 >= maxPossibleSolution.getCount()) {
 				responseWord.append(knowledge.getName());
 				responseWord.append("、");
-				elementList.add(knowledge.getName());
+				subjectList.add(knowledge.getName());
 				continue;
 			}
 			break;
@@ -88,19 +99,23 @@ public class XService implements ActionService {
 		responseWord.deleteCharAt(responseWord.length() - 1);
 		responseWord.replace(responseWord.lastIndexOf("、"), responseWord.lastIndexOf("、") + 1, "，或者是");
 		responseWord.append("。");
-		elementList.add(partList.get(2).getWord());
 		sentence.setResponseWord(responseWord.toString());
 		
 		// context setup
 		eventContext.setType(EventContext.SENTENCE_TYPE_DECLARATIVE);
-		eventContext.setElementList(elementList);
+		eventContext.setSubject(subjectList);
+		eventContext.setPredicate(EventContext.SENTECNE_PREDICATE_TYPE_IS);
+		List<String> objectList = new ArrayList<>();
+		objectList.add(partList.get(2).getWord());
+		eventContext.setObject(objectList);
+		eventContext.setFocus(EventContext.SENTENCE_PART_OF_SPEECH_SUBJECT);
 		
 		return sentence;
 	}
 
 	@Override
 	public void learning(EventContext eventContext, LEARNING flag) {
-		// TODO Auto-generated method stub
-
+		logger.debug("Learning class : [{}], sentence : [{}]", this.getClass().getName(),
+				eventContext.getCurrentEvent());
 	}
 }
