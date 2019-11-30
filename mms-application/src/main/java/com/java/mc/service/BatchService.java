@@ -1,0 +1,69 @@
+package com.java.mc.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.java.mc.bean.BatchJob;
+import com.java.mc.utils.Constants;
+
+@Component
+public class BatchService {
+	@Autowired
+	private GeneralMailService generalMailService;
+	
+	@Autowired
+	private ExchangeMailService exchangeMailService;
+
+//	@Autowired
+//	private LotusMailService lotusMailService;
+//	
+//	@Autowired
+//	private OpenMasSMService openMasSMService;
+
+	public void run(BatchJob batchJob) throws Exception {
+		
+		//nothing
+		if(batchJob == null){
+			throw new Exception("信息无效");
+		}
+		
+		Service service = null;
+		
+		//short message sender
+		if(Constants.ACTION_SM_SCAN == batchJob.getActionType()){
+			if(batchJob.getSmConfig() == null){
+				throw new Exception("缺少配置信息");
+			}
+			
+//			if(Constants.SHORT_MESSAGE_TUNNEL_OPENMAS == batchJob.getSmConfig().getSmTunnel()){
+//				service = this.openMasSMService;
+//			}
+		}
+		
+		//mail sender
+		if(Constants.ACTION_MAIL_SCAN == batchJob.getActionType()){
+			if(batchJob.getMsConfig() == null){
+				throw new Exception("缺少配置信息");
+			}
+			
+//			if (Constants.SERVER_TYPE_LOTUS == batchJob.getMsConfig().getServerType()) {
+//				service = this.lotusMailService;
+//			}
+			
+			if (Constants.SERVER_TYPE_EXCHANGE == batchJob.getMsConfig().getServerType()){
+				service = this.generalMailService;
+						
+			}
+			
+			if(Constants.SERVER_TYPE_GENERAL == batchJob.getMsConfig().getServerType()){
+				service = this.generalMailService;
+			}
+		}
+		
+		if(service == null){
+			throw new Exception("不被支持的任务");
+		}
+		
+		service.doAction(batchJob);
+	}
+}

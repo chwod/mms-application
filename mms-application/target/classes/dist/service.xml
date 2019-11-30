@@ -1,0 +1,21 @@
+<service>
+	<id>${dist.project.id}</id>
+	<name>${dist.project.name}</name>
+	<description>${dist.project.description}</description>
+	<workingdirectory>%BASE%\</workingdirectory>
+	<logpath>%BASE%\logs</logpath>
+	<logmode>rotate</logmode>
+	
+	<log mode="roll-by-time">
+  		<pattern>yyyyMMdd</pattern>
+	</log>
+	
+	<startmode>Automatic</startmode>
+	<stoptimeout>10sec</stoptimeout>
+	
+	<env name="JAVA_HOME" value="" />
+	<env name="JRE_HOME" value="%BASE%\jre" />
+
+	<executable>%BASE%\jre\bin\java</executable>
+	<arguments>-Xms1024m -Xmn128m -jar mms-application.jar</arguments>
+</service>

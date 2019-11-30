@@ -1,0 +1,44 @@
+server:
+  port: 7986
+---
+# log configurations
+# debug: true
+logging:
+        level:
+              cn.com.vgtech:  INFO
+              org.springframework: INFO
+              org.springframework.batch: OFF
+---
+# batch job configurations
+spring.batch:
+            initializer.enabled:  true
+            job.enabled: false
+---
+vg:
+    batch:
+          url:  jdbc:derby:db/vancloud;create=true
+          initialize: true
+          schema: db/MMS_derby_init.sql
+          job.name:  batchJob
+          step.name: batchStep
+          chunk.count:  10
+          current.db.version:  8
+          delaytime: 3000
+          sqlfile:
+                prefix: db/MMS_derby_update_for_version_
+                suffix: .sql
+---
+spring.thymeleaf.cache: false
+security.basic.enabled: false
+---
+cn.com.vgtech.mc.global.version: v1.1.0.16
+
+      
+      
+      
+      
+      
+      
+      
+      
+      

@@ -1,0 +1,194 @@
+﻿<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>MMS计划任务管理系统</title>
+		<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+		<link rel="stylesheet" type="text/css" href="/jquery/jquery-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="/css/default.css" />
+		<script src="/js/popmenu.js" type="text/javascript"></script>
+		<script src="/jquery/jquery.min.js" type="text/javascript"></script>
+		<script src="/jquery/jquery-ui.min.js" type="text/javascript"></script>
+		<script src="/jquery/jquery-migrate-3.0.0.min.js" type="text/javascript"></script>
+		<script src="/jquery/jquery-migrate-1.4.1.min.js" type="text/javascript"></script>
+		<script src="/js/index.js" type="text/javascript"></script>
+	</head>
+<body style="overflow: hidden; height: 100%;" scroll="no">
+		<table border="0" height="100%" width="100%"
+			style="border-collapse: collapse; margin: 0; padding: 0;">
+			<tr height="86px"
+				style="border-collapse: collapse; margin: 0; padding: 0;">
+				<td width="100%"
+					style="border-collapse: collapse; margin: 0; padding: 0;">
+					<div id="header"
+						style="border-collapse: collapse; margin: 0; padding: 0;">
+						<table border="0" cellspacing="0" cellpadding="0" align="center"
+							width="100%">
+							<tr>
+								<td valign="top" width="120" height="86px"><img
+									src="/images/logo_01.jpg" height="86px" width="120px" /></td>
+								<td height="86px" valign="top">
+									<table border="0" cellspacing="0" cellpadding="0" align="center"
+										width="100%">
+										<tr>
+											<td valign="top" background="/images/default/top1.gif"
+												height="60px">
+												<table width="100%" height="60px" border="0" align="center"
+													cellpadding="0" cellspacing="0" id="tbl_eflow_top">
+													<tr>
+														<td rowspan="2" align="left" valign="middle" height="55"
+															width="70%"
+															style="background-repeat: no-repeat; background-position: left center;">
+															<div>
+																<table border="0" width="100%">
+																	<tr>
+																		<td width="0px">&nbsp;</td>
+																		<td><font color="white" size="5">MMS计划任务管理系统</font>
+																		</td>
+																	</tr>
+																</table>
+															</div>
+														</td>
+														<td>&nbsp;</td>
+														<td width="365" align="right" valign="top">
+															<table id="left_table" width="365px" height="28px"
+																border="0" align="right" cellpadding="0" cellspacing="0">
+																<tr>
+																	<td width="21%" align="center"><a href="#"
+																		target="_parent"> <img
+																			src="/images/default/homepage.gif" width="39"
+																			height="16" border="0" />
+																	</a></td>
+																	<td width="23%">
+																		<div class="childmenu">
+																			<a href="#" id="popmenu"><img
+																				src="/images/default/mystyle.gif"
+																				style="cursor: pointer; vertical-align: middle;"
+																				border="0" /> </a>
+																			<ul id="mymenu">
+																				<li><a href="#">模板设置</a></li>
+																				<li><a href="#">灰色</a></li>
+																				<li><a href="#">浅灰色</a></li>
+																				<li><a href="#">橄榄色</a></li>
+																				<li><a href="#">紫色</a></li>
+																				<li><a href="#">蓝色</a></li>
+																			</ul>
+																		</div>
+																	</td>
+	
+																	<td width="23%" align="center" id="changepasswordDiv"><a href="#"
+																		> <img
+																			src="/images/default/updatepwd.gif" width="65"
+																			height="16" border="0" />
+																	</a></td>
+	
+																	<td width="23%" align="center"><a href="#"
+																		target="_parent"><img src="/images/help.gif"
+																			width="65" height="16" border="0" /></a></td>
+																	<td width="16%" align="center" id="logoutDiv"><a href="#"><img
+																			src="/images/default/logoff.gif" width="41"
+																			height="16" border="0" /></a></td>
+																</tr>
+																<tr height="10">
+																</tr>
+																<tr height="30">
+																	<td width="21%"></td>
+																	<td colspan="2" width="46%" align="center"><input
+																		type="text" size="20" /></td>
+																	<td width="23%" align="left"><input type="button"
+																		style="background: transparent url(/images/portal/map3.gif) !important; width: 60px; height: 20px; border-bottom: 1px solid #a5acb2; border-right: 0px; color: #000000; cursor: pointer;"
+																		value="搜索" /></td>
+																	<td width="16%"></td>
+																</tr>
+															</table>
+														</td>
+													</tr>
+												</table>
+											</td>
+										</tr>
+										<tr height="100%">
+											<td valign="top" height="26">
+	
+												<div class="menubar" style="height: 26px; padding-top: 0px;">
+	
+													<ul id="appmenu">
+														<li id="main"><a href="/state/" target="mainFrame">系统运行状态</a></li>
+														<li id="yard"><a href="/schedule/" target="mainFrame">计划任务</a></li>
+														<li id="dsm"><a href="/dsm/" target="mainFrame">数据源</a></li>
+														<li id="msm"><a href="/msm/" target="mainFrame">邮件服务器</a></li>
+														<li id="smm"><a href="/smm/" target="mainFrame">短信通道</a></li>
+													</ul>
+												</div>
+											</td>
+										</tr>
+	
+									</table>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</td>
+			</tr>
+			<tr style="border-collapse: collapse; margin: 0; padding: 0;">
+				<td width="100%"
+					style="border-collapse: collapse; margin: 0; padding: 0;">
+					<div id="mainbody" style="height: 100%">
+						<table border="2" width="100%" height="100%" cellspacing="0"
+							cellpadding="0" align="center">
+							<tr>
+								<td width="100%" align="center">
+									<div style="width: 100%; height: 100%">
+										<iframe src="/state/" id="mainFrame" name="mainFrame" frameborder="0"
+											style="width: 100%; height: 100%; overflow: auto;"> </iframe>
+									</div>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</td>
+			</tr>
+			<tr height="18px" style="border-collapse: collapse;">
+				<td width="100%">
+					<div id="bottom">
+						<table border="0" width="100%" cellspacing="0" cellpadding="0"
+							align="center" style="padding-top: 8px;">
+							<tr>
+								<td width="60%"></td>
+								<td width="40%" align="center">AllRight(C)2016
+									www.vgtech.com.cn (<span id="vgversion"></span>) </td>
+							</tr>
+						</table>
+					</div>
+				</td>
+			</tr>
+		</table>
+	<div style="display: none">
+		<div id="changepassword-dialog-form" title="修改密码">
+		  <p class="validateTips"></p>
+		  <form>
+		    <fieldset>
+		      <label for="oldpassword" style="text-align: left">原密码：</label>
+		      <input type="password" name="oldpassword" id="oldpassword" value=""  style="float: right" class="text ui-widget-content ui-corner-all"></input>
+		      <p></p>
+		      <label for="newpassword" style="text-align: left">新密码：</label>
+		      <input type="password" name="newpassword" id="newpassword" value="" style="float: right" class="text ui-widget-content ui-corner-all"></input>
+		      <p></p>
+		      <label for="renewpassword" style="text-align: left">重复新密码：</label>
+		      <input type="password" name="renewpassword" id="renewpassword" value=""  style="float: right" class="text ui-widget-content ui-corner-all"></input>
+		      <input type="submit" tabindex="-1" style="position:absolute; top:-1000px"></input>
+		    </fieldset>
+		  </form>
+		</div>
+		
+		<div id="changepassword-dialog-message" title="提示消息">
+		  <p>
+		    <span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
+		    密码修改成功，请重新登录。
+		  </p>
+		</div>
+	</div>
+
+
+</body>
+</html>
+

@@ -1,0 +1,309 @@
+package cn.com.vgtech.mc.bean;
+
+import java.io.Serializable;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.List;
+
+public class Schedule implements Serializable {
+
+	private static final long serialVersionUID = 3583257529024711145L;
+	private Integer id;
+	private String displayName;
+	private Integer actionType;
+	private String scheduleType;
+	private String actionDisplayName;
+	private Integer msid;
+	private String msName;
+	private List<SendCondition> sendConditionList;
+	private String sendConditions;
+	private Integer dsid;
+	private String dsName;
+	private Integer smid;
+	private String smName;
+	private Boolean attachmentAsContent;
+	private String url;
+	private Integer executeCount;
+	private Integer successCount;
+	private Integer failedCount;
+	private String cronExpression;
+	private String scheduleStatus;
+	private Integer startflag;
+	private String command;
+	private String commandVariable;
+	private String sqlSentence;
+	private Integer delay;
+	private Long delayTime;
+	private Integer delayhour;
+	private String delayDay;
+	private Integer delayMinute;
+	private Timestamp delayDate;
+	private String description;
+	private String jobName;
+	private String groupName;
+	private String status;
+	private String vprotocol;
+	private String vhost;
+	private Integer vport;
+	private String vappname;
+	private String vprgname;
+	private String updateTime;
+	private String createTime;
+	
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	public String getDisplayName() {
+		return displayName;
+	}
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName == null ? null : displayName.trim();
+	}
+	public Integer getActionType() {
+		return actionType;
+	}
+	public void setActionType(Integer actionType) {
+		this.actionType = actionType;
+	}
+	public Integer getMsid() {
+		return msid;
+	}
+	public void setMsid(Integer msid) {
+		this.msid = msid;
+	}
+	public Integer getDsid() {
+		return dsid;
+	}
+	public void setDsid(Integer dsid) {
+		this.dsid = dsid;
+	}
+	public String getCronExpression() {
+		return cronExpression;
+	}
+	public void setCronExpression(String cronExpression) {
+		this.cronExpression = cronExpression == null ? null : cronExpression.trim();
+	}
+	public Long getDelayTime() {
+		return delayTime;
+	}
+	public void setDelayTime(Long delayTime) {
+		this.delayTime = delayTime;
+	}
+	public Timestamp getDelayDate() {
+		return delayDate;
+	}
+	public void setDelayDate(Timestamp delayDate) {
+		this.delayDate = delayDate;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description == null ? null : description.trim();
+	}
+	public String getJobName() {
+		return jobName;
+	}
+	public void setJobName(String jobName) {
+		this.jobName = jobName == null ? null : jobName.trim();
+	}
+	public String getGroupName() {
+		return groupName;
+	}
+	public void setGroupName(String groupName) {
+		this.groupName = groupName == null ? null : groupName.trim();
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	public String getActionDisplayName() {
+		return actionDisplayName;
+	}
+	public void setActionDisplayName(String actionDisplayName) {
+		this.actionDisplayName = actionDisplayName;
+	}
+	public Integer getStartflag() {
+		return startflag;
+	}
+	public void setStartflag(Integer startflag) {
+		this.startflag = startflag;
+	}
+	public Integer getDelay() {
+		return delay;
+	}
+	public void setDelay(Integer delay) {
+		this.delay = delay;
+	}
+	public Integer getDelayhour() {
+		return delayhour;
+	}
+	public void setDelayhour(Integer delayhour) {
+		this.delayhour = delayhour;
+	}
+	public Integer getDelayMinute() {
+		return delayMinute;
+	}
+	public void setDelayMinute(Integer delayMinute) {
+		this.delayMinute = delayMinute;
+	}
+	public String getDelayDay() {
+		return delayDay;
+	}
+	public void setDelayDay(String delayDay) {
+		this.delayDay = delayDay;
+	}
+	public String getScheduleType() {
+		return scheduleType;
+	}
+	public void setScheduleType(String scheduleType) {
+		this.scheduleType = scheduleType;
+	}
+	public String getScheduleStatus() {
+		return scheduleStatus;
+	}
+	public void setScheduleStatus(String scheduleStatus) {
+		this.scheduleStatus = scheduleStatus;
+	}
+	public String getVprotocol() {
+		return vprotocol;
+	}
+	public void setVprotocol(String vprotocol) {
+		this.vprotocol = vprotocol;
+	}
+	public String getVhost() {
+		return vhost;
+	}
+	public void setVhost(String vhost) {
+		this.vhost = vhost;
+	}
+	public Integer getVport() {
+		return vport;
+	}
+	public void setVport(Integer vport) {
+		this.vport = vport;
+	}
+	public String getVprgname() {
+		return vprgname;
+	}
+	public void setVprgname(String vprgname) {
+		this.vprgname = vprgname;
+	}
+	public String getVappname() {
+		return vappname;
+	}
+	public void setVappname(String vappname) {
+		this.vappname = vappname;
+	}
+	public String getUrl() {
+		return url;
+	}
+	public void setUrl(String url) {
+		this.url = url;
+	}
+	public Boolean isAttachmentAsContent() {
+		return attachmentAsContent;
+	}
+	public void setAttachmentAsContent(Boolean attachmentAsContent) {
+		this.attachmentAsContent = attachmentAsContent;
+	}
+	public Integer getExecuteCount() {
+		return executeCount;
+	}
+	public void setExecuteCount(Integer executeCount) {
+		this.executeCount = executeCount;
+	}
+	public Integer getSuccessCount() {
+		return successCount;
+	}
+	public void setSuccessCount(Integer successCount) {
+		this.successCount = successCount;
+	}
+	public Integer getFailedCount() {
+		return failedCount;
+	}
+	public void setFailedCount(Integer failedCount) {
+		this.failedCount = failedCount;
+	}
+	public String getCommand() {
+		return command;
+	}
+	public void setCommand(String command) {
+		this.command = command;
+	}
+	public String getCommandVariable() {
+		return commandVariable;
+	}
+	public void setCommandVariable(String commandVariable) {
+		this.commandVariable = commandVariable;
+	}
+	public String getSqlSentence() {
+		return sqlSentence;
+	}
+	public void setSqlSentence(String sqlSentence) {
+		this.sqlSentence = sqlSentence;
+	}
+	public Integer getSmid() {
+		return smid;
+	}
+	public void setSmid(Integer smid) {
+		this.smid = smid;
+	}
+	public String getMsName() {
+		return msName;
+	}
+	public void setMsName(String msName) {
+		this.msName = msName;
+	}
+	public String getDsName() {
+		return dsName;
+	}
+	public void setDsName(String dsName) {
+		this.dsName = dsName;
+	}
+	public String getSmName() {
+		return smName;
+	}
+	public void setSmName(String smName) {
+		this.smName = smName;
+	}
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
+	}
+	public String getUpdateTime() {
+		return updateTime;
+	}
+	public void setUpdateTime(Timestamp updateTime) {
+		if(updateTime != null){
+			this.updateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(updateTime);
+		}
+	}
+	public String getCreateTime() {
+		return createTime;
+	}
+	public void setCreateTime(Timestamp createTime) {
+		if(createTime != null){
+			this.createTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(createTime);
+		}
+	}
+	public List<SendCondition> getSendConditionList() {
+		return sendConditionList;
+	}
+	public void setSendCondition(List<SendCondition> sendConditionList) {
+		this.sendConditionList = sendConditionList;
+	}
+	public String getSendConditions() {
+		return sendConditions;
+	}
+	public void setSendConditions(String sendConditions) {
+		this.sendConditions = sendConditions;
+	}
+	public void setSendConditionList(List<SendCondition> sendConditionList) {
+		this.sendConditionList = sendConditionList;
+	}
+}

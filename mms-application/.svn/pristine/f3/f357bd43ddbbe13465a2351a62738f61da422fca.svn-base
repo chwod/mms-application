@@ -1,0 +1,8 @@
+package cn.com.vgtech.mc.service;
+
+import cn.com.vgtech.mc.bean.BatchJob;
+
+public interface Service {
+
+	void doAction(BatchJob batchJob) throws Exception;
+}

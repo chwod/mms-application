@@ -1,6 +1,0 @@
-Manifest-Version: 1.0
-Implementation-Title: robot
-Implementation-Version: 0.0.2-SNAPSHOT
-Build-Jdk-Spec: 1.8
-Created-By: Maven Integration for Eclipse
-

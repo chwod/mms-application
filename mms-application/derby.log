@@ -1,0 +1,26 @@
+----------------------------------------------------------------
+Sat Nov 30 11:10:59 CST 2019:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.13.1.1 - (1765088): instance a816c00e-016e-ba4a-44c2-00000ad20670 
+on database directory /Users/liuxun/Documents/workspace-tdd/mms-application/db/mmscloud with class loader sun.misc.Launcher$AppClassLoader@764c12b6 
+Loaded from file:/Users/liuxun/.m2/repository/org/apache/derby/derby/10.13.1.1/derby-10.13.1.1.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_131-b11
+user.dir=/Users/liuxun/Documents/workspace-tdd/mms-application
+os.name=Mac OS X
+os.arch=x86_64
+os.version=10.15.1
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''
+----------------------------------------------------------------
+Sat Nov 30 11:11:00 CST 2019:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.13.1.1 - (1765088): instance 601a400f-016e-ba4a-44c2-00000ad20670 
+on database directory memory:/Users/liuxun/Documents/workspace-tdd/mms-application/testdb with class loader sun.misc.Launcher$AppClassLoader@764c12b6 
+Loaded from file:/Users/liuxun/.m2/repository/org/apache/derby/derby/10.13.1.1/derby-10.13.1.1.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_131-b11
+user.dir=/Users/liuxun/Documents/workspace-tdd/mms-application
+os.name=Mac OS X
+os.arch=x86_64
+os.version=10.15.1
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''

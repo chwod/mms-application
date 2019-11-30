@@ -1,0 +1,51 @@
+.schedule-status-images-NORMAL {
+	background-image: url(/images/fam/clock_play.png) !important;
+}
+
+.schedule-status-images-UNSCHEDULE {
+	background-image: url(/images/fam/clock_stop.png) !important;
+}
+
+.schedule-status-images-PAUSED {
+	background-image: url(/images/fam/clock_pause.png) !important;
+}
+
+.schedule-status-images-COMPLETE {
+	background-image: url(/images/fam/clock_link.png) !important;
+}
+
+.schedule-status-images-ERROR {
+	background-image: url(/images/fam/clock_error.png) !important;
+}
+
+.schedule-status-images-BLOCKED {
+	background-image: url(/images/fam/clock_delete.png) !important;
+}
+
+.schedule-status-container {
+	background-repeat: no-repeat;
+}
+
+.schedule-status-message {
+	padding-left: 18px;
+}
+
+.schedule-status-message-NORMAL {
+	color: green;
+}
+
+.schedule-status-message-UNSCHEDULE {
+	color: blue;
+}
+
+.schedule-status-message-PAUSED {
+	color: blue;
+}
+
+.schedule-status-message-ERROR {
+	color: red;
+}
+
+.icon-refresh {
+	background-image: url(/images/fam/arrow_refresh.png) !important;
+}

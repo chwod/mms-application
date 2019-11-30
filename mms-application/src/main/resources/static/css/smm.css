@@ -1,0 +1,40 @@
+.icon-title {
+	background-image: url(/images/fam/email.png) !important;
+}
+
+.icon-add {
+	background-image: url(/images/fam/email_add.png) !important;
+}
+
+.icon-edit {
+	background-image: url(/images/fam/email_edit.png) !important;
+}
+
+.icon-regular {
+	background-image: url(/images/fam/email_link.png) !important;
+}
+
+.icon-delete {
+	background-image: url(/images/fam/email_delete.png) !important;
+}
+
+.icon-new {
+	background-image: url(/images/fam/email_add.png) !important;
+}
+
+.icon-refresh {
+	background-image: url(/images/fam/arrow_refresh.png) !important;
+}
+
+.grid-status-div {
+	width: 16px;
+	height: 16px;
+}
+
+.grid-status-yes {
+	background-image: url(/images/fam/tick.png) !important;
+}
+
+.grid-status-no {
+	background-image: url(/images/fam/cross.png) !important;
+}

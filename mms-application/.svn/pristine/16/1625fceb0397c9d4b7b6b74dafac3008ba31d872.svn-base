@@ -1,0 +1,171 @@
+package cn.com.vgtech.mc.db;
+
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
+
+import cn.com.vgtech.mc.bean.DatasourceConfig;
+import cn.com.vgtech.mc.utils.DBUtils;
+
+@Component
+public class DBConnection {
+
+	@Value("${vg.batch.url}")
+	private String url;
+
+	@Autowired
+	private DBOperation dbOperation;
+
+	private Map<Integer, JdbcTemplate> remoteJdbcTemplateMap = new HashMap<Integer, JdbcTemplate>();
+
+	/**
+	 * get remote jdbc template by id
+	 * 
+	 * @return remote jdbc template isntance
+	 */
+	public JdbcTemplate getRemoteJdbcTemplate(Integer id) {
+		if (!this.remoteJdbcTemplateMap.containsKey(id)) {
+			DatasourceConfig dsc = this.dbOperation.getDSConfigurationById(id);
+			if(dsc == null){
+				return null;
+			} else {
+				return this.getRemoteJdbcTemplate(dsc);
+			}
+		}
+		return this.remoteJdbcTemplateMap.get(id);
+	}
+	
+	/**
+	 * get remote jdbc template by id
+	 * 
+	 * @return remote jdbc template isntance
+	 */
+	public JdbcTemplate getRemoteJdbcTemplate(Integer id, boolean reset) {
+		if(reset || !this.remoteJdbcTemplateMap.containsKey(id)){
+			DatasourceConfig dsc = this.dbOperation.getDSConfigurationById(id);
+			if(dsc == null){
+				return null;
+			} else {
+				return this.getRemoteJdbcTemplate(dsc, reset);
+			}
+		}
+		return this.remoteJdbcTemplateMap.get(id);
+	}
+	
+	/**
+	 * get remote jdbc template by id
+	 * 
+	 * @return remote jdbc template isntance
+	 */
+	public JdbcTemplate getRemoteJdbcTemplate(DatasourceConfig dsconfig) {
+		return this.getRemoteJdbcTemplate(dsconfig, false);
+	}
+	
+	/**
+	 * get remote jdbc template by id
+	 * 
+	 * @return remote jdbc template instance
+	 */
+	public JdbcTemplate getRemoteJdbcTemplate(DatasourceConfig dsconfig, boolean reset) {
+		if(reset){
+			this.resetConnectionByid(dsconfig.getId());
+		}
+		if(!this.remoteJdbcTemplateMap.containsKey(dsconfig.getId())){
+			JdbcTemplate jdbcTemplate = new JdbcTemplate(this.buildRemoteDataSource(dsconfig));
+			jdbcTemplate.setQueryTimeout(10);
+			this.remoteJdbcTemplateMap.put(dsconfig.getId(),jdbcTemplate);
+		}
+		return this.remoteJdbcTemplateMap.get(dsconfig.getId());
+	}
+
+	/**
+	 * build remote datasource by datasource id.
+	 * 
+	 * @return remote datasource instance
+	 */
+	private DataSource buildRemoteDataSource(DatasourceConfig dsconfig) {
+		return DataSourceBuilder.create()
+				.url(DBUtils.getDBURL(dsconfig.getSqlType(), dsconfig.getHost(), dsconfig.getPort(),
+						dsconfig.getDbName(), dsconfig.getAuthType()))
+				.username(dsconfig.getUsername()).password(dsconfig.getPassword()).build();
+	}
+
+	/**
+	 * reset remote connection by id.
+	 * 
+	 * @param id
+	 */
+	public void resetConnectionByid(Integer id) {
+		if(this.remoteJdbcTemplateMap.containsKey(id)){
+			JdbcTemplate remoteJdbcTemplate = this.remoteJdbcTemplateMap.get(id);
+			if(remoteJdbcTemplate != null){
+				try {
+					remoteJdbcTemplate.getDataSource().getConnection().close();
+				} catch (SQLException e) {
+				}
+				remoteJdbcTemplate = null;
+			}
+			this.remoteJdbcTemplateMap.remove(id);
+		}
+		System.gc();
+	}
+
+	public Map<Integer, JdbcTemplate> getRemoteJdbcTemplateMap() {
+		return remoteJdbcTemplateMap;
+	}
+	
+
+	/**
+	 * check whether the remote database connection is valid or not.
+	 * @param id
+	 * @throws Exception
+	 */
+	public void checkRemoteConnection(Integer id) throws Exception {
+		this.checkRemoteConnection(id, false);
+	}
+
+	/**
+	 * check whether the remote database connection is valid or not.
+	 * @param id
+	 * @throws Exception
+	 */
+	public void checkRemoteConnection(Integer id, boolean reset) throws Exception {
+		DatasourceConfig dsc = this.dbOperation.getDSConfigurationById(id);
+		if (dsc == null) {
+			throw new Exception("数据配置信息未找到，或已删除");
+		}
+		String checkSQL = DBUtils.getCheckSQL(dsc.getSqlType());
+		this.getRemoteJdbcTemplate(id, reset).execute(checkSQL);
+	}
+	
+	/**
+	 * check whether the remote database connection is valid or not.
+	 * @param id
+	 * @throws Exception
+	 */
+	public void checkRemoteConnection(DatasourceConfig dsc) throws Exception {
+		this.checkRemoteConnection(dsc, false);
+	}
+	
+	/**
+	 * check whether the remote database connection is valid or not.
+	 * @param id data source configuration id
+	 * @param reset indicate if the connection is invalid
+	 * @throws Exception throw exception if the connection is invalid
+	 */
+	public void checkRemoteConnection(DatasourceConfig dsc, boolean reset) throws Exception {
+		if (dsc == null) {
+			throw new Exception("无效数据库连接配置信息");
+		}
+		String checkSQL = DBUtils.getCheckSQL(dsc.getSqlType());
+		this.getRemoteJdbcTemplate(dsc, reset).execute(checkSQL);
+	}
+}
