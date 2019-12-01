@@ -1,0 +1,16 @@
+a = String.new("Hello World")
+b = a.reverse
+c = " "
+d = "Hello".reverse
+e = a[6, 5].reverse
+f = 100 + 35
+g = 2 * 10
+h = 13 % 5
+$a = a
+$b = b
+$c = c
+$d = d
+$e = e
+$f = f
+$g = g
+$h = h
